@@ -1,0 +1,682 @@
+
+
+        *** GPGPU-Sim Simulator Version 4.0.0  [build gpgpu-sim_git-commit-b1fdc6da937e638fc1cf735829613f1037bbbf1a_modified_0.0] ***
+
+
+GPGPU-Sim PTX: simulation mode 0 (can change with PTX_SIM_MODE_FUNC environment variable:
+               1=functional simulation only, 0=detailed performance simulator)
+GPGPU-Sim PTX: overriding embedded ptx with ptx file (PTX_SIM_USE_PTX_FILE is set)
+GPGPU-Sim: Configuration options:
+
+-save_embedded_ptx                      0 # saves ptx files embedded in binary as <n>.ptx
+-keep                                   0 # keep intermediate files created by GPGPU-Sim when interfacing with external programs
+-gpgpu_ptx_save_converted_ptxplus                    0 # Saved converted ptxplus to a file
+-gpgpu_occupancy_sm_number                   62 # The SM number to pass to ptxas when getting register usage for computing GPU occupancy. This parameter is required in the config.
+-ptx_opcode_latency_int      4,13,4,5,145,32 # Opcode latencies for integers <ADD,MAX,MUL,MAD,DIV,SHFL>Default 1,1,19,25,145,32
+-ptx_opcode_latency_fp          4,13,4,5,39 # Opcode latencies for single precision floating points <ADD,MAX,MUL,MAD,DIV>Default 1,1,1,1,30
+-ptx_opcode_latency_dp         8,19,8,8,330 # Opcode latencies for double precision floating points <ADD,MAX,MUL,MAD,DIV>Default 8,8,8,8,335
+-ptx_opcode_latency_sfu                    8 # Opcode latencies for SFU instructionsDefault 8
+-ptx_opcode_latency_tesnor                   64 # Opcode latencies for Tensor instructionsDefault 64
+-ptx_opcode_initiation_int          1,1,1,1,4,4 # Opcode initiation intervals for integers <ADD,MAX,MUL,MAD,DIV,SHFL>Default 1,1,4,4,32,4
+-ptx_opcode_initiation_fp            1,2,1,1,4 # Opcode initiation intervals for single precision floating points <ADD,MAX,MUL,MAD,DIV>Default 1,1,1,1,5
+-ptx_opcode_initiation_dp          8,8,8,8,130 # Opcode initiation intervals for double precision floating points <ADD,MAX,MUL,MAD,DIV>Default 8,8,8,8,130
+-ptx_opcode_initiation_sfu                    4 # Opcode initiation intervals for sfu instructionsDefault 8
+-ptx_opcode_initiation_tensor                   64 # Opcode initiation intervals for tensor instructionsDefault 64
+-cdp_latency         7200,8000,100,12000,1600 # CDP API latency <cudaStreamCreateWithFlags, cudaGetParameterBufferV2_init_perWarp, cudaGetParameterBufferV2_perKernel, cudaLaunchDeviceV2_init_perWarp, cudaLaunchDevicV2_perKernel>Default 7200,8000,100,12000,1600
+-network_mode                           1 # Interconnection network mode
+-inter_config_file   config_pascal_islip.icnt # Interconnection network config file
+-inct_in_buffer_limit                   64 # in_buffer_limit
+-inct_out_buffer_limit                   64 # out_buffer_limit
+-inct_subnets                           2 # subnets
+-arbiter_algo                           1 # arbiter_algo
+-gpgpu_ptx_use_cuobjdump                    1 # Use cuobjdump to extract ptx and sass from binaries
+-gpgpu_experimental_lib_support                    0 # Try to extract code from cuda libraries [Broken because of unknown cudaGetExportTable]
+-checkpoint_option                      0 #  checkpointing flag (0 = no checkpoint)
+-checkpoint_kernel                      1 #  checkpointing during execution of which kernel (1- 1st kernel)
+-checkpoint_CTA                         0 #  checkpointing after # of CTA (< less than total CTA)
+-resume_option                          0 #  resume flag (0 = no resume)
+-resume_kernel                          0 #  Resume from which kernel (1= 1st kernel)
+-resume_CTA                             0 #  resume from which CTA 
+-checkpoint_CTA_t                       0 #  resume from which CTA 
+-checkpoint_insn_Y                      0 #  resume from which CTA 
+-gpgpu_ptx_convert_to_ptxplus                    0 # Convert SASS (native ISA) to ptxplus and run ptxplus
+-gpgpu_ptx_force_max_capability                   61 # Force maximum compute capability
+-gpgpu_ptx_inst_debug_to_file                    0 # Dump executed instructions' debug information to file
+-gpgpu_ptx_inst_debug_file       inst_debug.txt # Executed instructions' debug output file
+-gpgpu_ptx_inst_debug_thread_uid                    1 # Thread UID for executed instructions' debug output
+-gpgpu_simd_model                       1 # 1 = post-dominator
+-gpgpu_shader_core_pipeline              1024:32 # shader core pipeline config, i.e., {<nthread>:<warpsize>}
+-gpgpu_tex_cache:l1  N:16:128:24,L:R:m:N:L,T:128:4,128:2 # per-shader L1 texture cache  (READ-ONLY) config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>:<rf>}
+-gpgpu_const_cache:l1 N:128:64:2,L:R:f:N:L,S:2:64,4 # per-shader L1 constant memory cache  (READ-ONLY) config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>} 
+-gpgpu_cache:il1     N:8:128:4,L:R:f:N:L,S:2:48,4 # shader L1 instruction cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>} 
+-gpgpu_cache:dl1     S:4:128:48,L:L:s:N:L,A:256:8,16:0,32 # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-l1_banks                               1 # The number of L1 cache banks
+-l1_latency                            82 # L1 Hit Latency
+-smem_latency                          24 # smem Latency
+-gpgpu_cache:dl1PrefL1 S:4:128:48,L:L:s:N:L,A:256:8,16:0,32 # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-gpgpu_cache:dl1PrefShared S:4:128:48,L:L:s:N:L,A:256:8,16:0,32 # per-shader L1 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq> | none}
+-gmem_skip_L1D                          1 # global memory access skip L1D cache (implements -Xptxas -dlcm=cg, default=no skip)
+-gpgpu_perfect_mem                      0 # enable perfect memory mode (no cache miss)
+-n_regfile_gating_group                    4 # group of lanes that should be read/written together)
+-gpgpu_clock_gated_reg_file                    0 # enable clock gated reg file for power calculations
+-gpgpu_clock_gated_lanes                    0 # enable clock gated lanes for power calculations
+-gpgpu_shader_registers                32768 # Number of registers per shader core. Limits number of concurrent CTAs. (default 8192)
+-gpgpu_registers_per_block                 8192 # Maximum number of registers per CTA. (default 8192)
+-gpgpu_ignore_resources_limitation                    1 # gpgpu_ignore_resources_limitation (default 0)
+-gpgpu_shader_cta                      16 # Maximum number of concurrent CTAs in shader (default 8)
+-gpgpu_num_cta_barriers                   16 # Maximum number of named barriers per CTA (default 16)
+-gpgpu_n_clusters                      28 # number of processing clusters
+-gpgpu_n_cores_per_cluster                    2 # number of simd cores per cluster
+-gpgpu_n_cluster_ejection_buffer_size                   32 # number of packets in ejection buffer
+-gpgpu_n_ldst_response_buffer_size                    2 # number of response packets in ld/st unit ejection buffer
+-gpgpu_shmem_per_block                49152 # Size of shared memory per thread block or CTA (default 48kB)
+-gpgpu_shmem_size                   49152 # Size of shared memory per shader core (default 16kB)
+-adaptive_cache_config                    0 # adaptive_cache_config
+-gpgpu_shmem_sizeDefault                49152 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_size_PrefL1                49152 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_size_PrefShared                49152 # Size of shared memory per shader core (default 16kB)
+-gpgpu_shmem_num_banks                   32 # Number of banks in the shared memory in each shader core (default 16)
+-gpgpu_shmem_limited_broadcast                    0 # Limit shared memory to do one broadcast per cycle (default on)
+-gpgpu_shmem_warp_parts                    1 # Number of portions a warp is divided into for shared memory bank conflict check 
+-mem_unit_ports                         1 # The number of memory transactions allowed per core cycle
+-gpgpu_shmem_warp_parts                    1 # Number of portions a warp is divided into for shared memory bank conflict check 
+-gpgpu_warpdistro_shader                   -1 # Specify which shader core to collect the warp size distribution from
+-gpgpu_warp_issue_shader                    0 # Specify which shader core to collect the warp issue distribution from
+-gpgpu_local_mem_map                    1 # Mapping from local memory space address to simulated GPU physical address space (default = enabled)
+-gpgpu_num_reg_banks                   32 # Number of register banks (default = 8)
+-gpgpu_reg_bank_use_warp_id                    0 # Use warp ID in mapping registers to banks (default = off)
+-sub_core_model                         0 # Sub Core Volta/Pascal model (default = off)
+-enable_specialized_operand_collector                    1 # enable_specialized_operand_collector
+-gpgpu_operand_collector_num_units_sp                   12 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_dp                    6 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_units_sfu                    6 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_int                    0 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_units_tensor_core                    4 # number of collector units (default = 4)
+-gpgpu_operand_collector_num_units_mem                    8 # number of collector units (default = 2)
+-gpgpu_operand_collector_num_units_gen                    0 # number of collector units (default = 0)
+-gpgpu_operand_collector_num_in_ports_sp                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_dp                    1 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_in_ports_sfu                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_int                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_in_ports_tensor_core                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_mem                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_in_ports_gen                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_sp                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_dp                    1 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_sfu                    2 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_int                    0 # number of collector unit in ports (default = 0)
+-gpgpu_operand_collector_num_out_ports_tensor_core                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_mem                    1 # number of collector unit in ports (default = 1)
+-gpgpu_operand_collector_num_out_ports_gen                    0 # number of collector unit in ports (default = 0)
+-gpgpu_coalesce_arch                   61 # Coalescing arch (GT200 = 13, Fermi = 20)
+-gpgpu_num_sched_per_core                    2 # Number of warp schedulers per core
+-gpgpu_max_insn_issue_per_warp                    2 # Max number of instructions that can be issued per warp in one cycle by scheduler (either 1 or 2)
+-gpgpu_dual_issue_diff_exec_units                    1 # should dual issue use two different execution unit resources (Default = 1)
+-gpgpu_simt_core_sim_order                    1 # Select the simulation order of cores in a cluster (0=Fix, 1=Round-Robin)
+-gpgpu_pipeline_widths 2,1,0,2,1,2,1,0,2,1,5 # Pipeline widths ID_OC_SP,ID_OC_DP,ID_OC_INT,ID_OC_SFU,ID_OC_MEM,OC_EX_SP,OC_EX_DP,OC_EX_INT,OC_EX_SFU,OC_EX_MEM,EX_WB,ID_OC_TENSOR_CORE,OC_EX_TENSOR_CORE
+-gpgpu_tensor_core_avail                    0 # Tensor Core Available (default=0)
+-gpgpu_num_sp_units                     2 # Number of SP units (default=1)
+-gpgpu_num_dp_units                     1 # Number of DP units (default=0)
+-gpgpu_num_int_units                    0 # Number of INT units (default=0)
+-gpgpu_num_sfu_units                    2 # Number of SF units (default=1)
+-gpgpu_num_tensor_core_units                    1 # Number of tensor_core units (default=1)
+-gpgpu_num_mem_units                    1 # Number if ldst units (default=1) WARNING: not hooked up to anything
+-gpgpu_scheduler                      gto # Scheduler configuration: < lrr | gto | two_level_active > If two_level_active:<num_active_warps>:<inner_prioritization>:<outer_prioritization>For complete list of prioritization values see shader.h enum scheduler_prioritization_typeDefault: gto
+-gpgpu_concurrent_kernel_sm                    0 # Support concurrent kernels on a SM (default = disabled)
+-perf_sim_memcpy                        1 # Fill the L2 cache on memcpy
+-simple_dram_model                      0 # simple_dram_model with fixed latency and BW
+-gpgpu_dram_scheduler                    1 # 0 = fifo, 1 = FR-FCFS (defaul)
+-gpgpu_dram_partition_queues          32:32:32:32 # i2$:$2d:d2$:$2i
+-l2_ideal                               0 # Use a ideal L2 cache that always hit
+-gpgpu_cache:dl2     S:64:128:16,L:B:m:L:L,A:256:64,16:0,32 # unified banked L2 data cache config  {<nsets>:<bsize>:<assoc>,<rep>:<wr>:<alloc>:<wr_alloc>,<mshr>:<N>:<merge>,<mq>}
+-gpgpu_cache:dl2_texture_only                    0 # L2 cache used for texture only
+-gpgpu_n_mem                           12 # number of memory modules (e.g. memory controllers) in gpu
+-gpgpu_n_sub_partition_per_mchannel                    2 # number of memory subpartition in each memory module
+-gpgpu_n_mem_per_ctrlr                    1 # number of memory chips per memory controller
+-gpgpu_memlatency_stat                   14 # track and display latency statistics 0x2 enables MC, 0x4 enables queue logs
+-gpgpu_frfcfs_dram_sched_queue_size                   64 # 0 = unlimited (default); # entries per chip
+-gpgpu_dram_return_queue_size                   64 # 0 = unlimited (default); # entries per chip
+-gpgpu_dram_buswidth                    4 # default = 4 bytes (8 bytes per cycle at DDR)
+-gpgpu_dram_burst_length                    8 # Burst length of each DRAM request (default = 4 data bus cycle)
+-dram_data_command_freq_ratio                    4 # Frequency ratio between DRAM data bus and command bus (default = 2 times, i.e. DDR)
+-gpgpu_dram_timing_opt nbk=16:CCD=2:RRD=8:RCD=16:RAS=37:RP=16:RC=52: CL=16:WL=6:CDLR=7:WR=16:nbkgrp=4:CCDL=4:RTPL=3 # DRAM timing parameters = {nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR:nbkgrp:tCCDL:tRTPL}
+-rop_latency                          120 # ROP queue latency (default 85)
+-dram_latency                         100 # DRAM latency (default 30)
+-dual_bus_interface                     0 # dual_bus_interface (default = 0) 
+-dram_bnk_indexing_policy                    0 # dram_bnk_indexing_policy (0 = normal indexing, 1 = Xoring with the higher bits) (Default = 0)
+-dram_bnkgrp_indexing_policy                    1 # dram_bnkgrp_indexing_policy (0 = take higher bits, 1 = take lower bits) (Default = 0)
+-Seperate_Write_Queue_Enable                    0 # Seperate_Write_Queue_Enable
+-Write_Queue_Size                32:28:16 # Write_Queue_Size
+-Elimnate_rw_turnaround                    0 # elimnate_rw_turnaround i.e set tWTR and tRTW = 0
+-icnt_flit_size                        40 # icnt_flit_size
+-gpgpu_mem_addr_mapping dramid@8;00000000.00000000.00000000.00000000.0000RRRR.RRRRRRRR.RBBBCCCC.BCCSSSSS # mapping memory address to dram model {dramid@<start bit>;<memory address map>}
+-gpgpu_mem_addr_test                    0 # run sweep test to check address mapping for aliased address
+-gpgpu_mem_address_mask                    1 # 0 = old addressing mask, 1 = new addressing mask, 2 = new add. mask + flipped bank sel and chip sel bits
+-memory_partition_indexing                    0 # 0 = no indexing, 1 = bitwise xoring, 2 = IPoly, 3 = custom indexing
+-gpuwattch_xml_file         gpuwattch.xml # GPUWattch XML file
+-power_simulation_enabled                    0 # Turn on power simulator (1=On, 0=Off)
+-power_per_cycle_dump                    0 # Dump detailed power output each cycle
+-power_trace_enabled                    0 # produce a file for the power trace (1=On, 0=Off)
+-power_trace_zlevel                     6 # Compression level of the power trace output log (0=no comp, 9=highest)
+-steady_power_levels_enabled                    0 # produce a file for the steady power levels (1=On, 0=Off)
+-steady_state_definition                  8:4 # allowed deviation:number of samples
+-gpgpu_max_cycle                        0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_insn                         0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_cta                          0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_max_completed_cta                    0 # terminates gpu simulation early (0 = no limit)
+-gpgpu_runtime_stat                   500 # display runtime statistics such as dram utilization {<freq>:<flag>}
+-liveness_message_freq                    1 # Minimum number of seconds between simulation liveness messages (0 = always print)
+-gpgpu_compute_capability_major                    6 # Major compute capability version number
+-gpgpu_compute_capability_minor                    1 # Minor compute capability version number
+-gpgpu_flush_l1_cache                    1 # Flush L1 cache at the end of each kernel call
+-gpgpu_flush_l2_cache                    0 # Flush L2 cache at the end of each kernel call
+-gpgpu_deadlock_detect                    1 # Stop the simulation at deadlock (1=on (default), 0=off)
+-gpgpu_ptx_instruction_classification                    0 # if enabled will classify ptx instruction types per kernel (Max 255 kernels now)
+-gpgpu_ptx_sim_mode                     0 # Select between Performance (default) or Functional simulation (1)
+-gpgpu_clock_domains 1417.0:1417.0:1417.0:2500.0 # Clock Domain Frequencies in MhZ {<Core Clock>:<ICNT Clock>:<L2 Clock>:<DRAM Clock>}
+-gpgpu_max_concurrent_kernel                    8 # maximum kernels that can run concurrently on GPU
+-gpgpu_cflog_interval                    0 # Interval between each snapshot in control flow logger
+-visualizer_enabled                     0 # Turn on visualizer output (1=On, 0=Off)
+-visualizer_outputfile                 NULL # Specifies the output log file for visualizer
+-visualizer_zlevel                      6 # Compression level of the visualizer output log (0=no comp, 9=highest)
+-gpgpu_stack_size_limit                 1024 # GPU thread stack size
+-gpgpu_heap_size_limit              8388608 # GPU malloc heap size 
+-gpgpu_runtime_sync_depth_limit                    2 # GPU device runtime synchronize depth
+-gpgpu_runtime_pending_launch_count_limit                 2048 # GPU device runtime pending launch count
+-trace_enabled                          0 # Turn on traces
+-trace_components                    none # comma seperated list of traces to enable. Complete list found in trace_streams.tup. Default none
+-trace_sampling_core                    0 # The core which is printed using CORE_DPRINTF. Default 0
+-trace_sampling_memory_partition                   -1 # The memory partition which is printed using MEMPART_DPRINTF. Default -1 (i.e. all)
+-enable_ptx_file_line_stats                    1 # Turn on PTX source line statistic profiling. (1 = On)
+-ptx_line_stats_filename gpgpu_inst_stats.txt # Output file for PTX source line statistics.
+-gpgpu_kernel_launch_latency                    0 # Kernel launch latency in cycles. Default: 0
+-gpgpu_cdp_enabled                      0 # Turn on CDP
+DRAM Timing Options:
+nbk                                    16 # number of banks
+CCD                                     2 # column to column delay
+RRD                                     8 # minimal delay between activation of rows in different banks
+RCD                                    16 # row to column delay
+RAS                                    37 # time needed to activate row
+RP                                     16 # time needed to precharge (deactivate) row
+RC                                     52 # row cycle time
+CDLR                                    7 # switching from write to read (changes tWTR)
+WR                                     16 # last data-in to row precharge
+CL                                     16 # CAS latency
+WL                                      6 # Write latency
+nbkgrp                                  4 # number of bank groups
+CCDL                                    4 # column to column delay between accesses to different bank groups
+RTPL                                    3 # read to precharge delay between accesses to different bank groups
+Total number of memory sub partition = 24
+addr_dec_mask[CHIP]  = 0000000000000000 	high:64 low:0
+addr_dec_mask[BK]    = 0000000000007080 	high:15 low:7
+addr_dec_mask[ROW]   = 000000000fff8000 	high:28 low:15
+addr_dec_mask[COL]   = 0000000000000f7f 	high:12 low:0
+addr_dec_mask[BURST] = 000000000000001f 	high:5 low:0
+sub_partition_id_mask = 0000000000000080
+GPGPU-Sim uArch: clock freqs: 1417000000.000000:1417000000.000000:1417000000.000000:2500000000.000000
+GPGPU-Sim uArch: clock periods: 0.00000000070571630205:0.00000000070571630205:0.00000000070571630205:0.00000000040000000000
+*** Initializing Memory Statistics ***
+GPGPU-Sim uArch: interconnect node map (shaderID+MemID to icntID)
+GPGPU-Sim uArch: Memory nodes ID start from index: 28
+GPGPU-Sim uArch:    0   1   2   3   4   5   6
+GPGPU-Sim uArch:    7   8   9  10  11  12  13
+GPGPU-Sim uArch:   14  15  16  17  18  19  20
+GPGPU-Sim uArch:   21  22  23  24  25  26  27
+GPGPU-Sim uArch:   28  29  30  31  32  33  34
+GPGPU-Sim uArch:   35  36  37  38  39  40  41
+GPGPU-Sim uArch:   42  43  44  45  46  47  48
+GPGPU-Sim uArch:   49  50  51
+GPGPU-Sim uArch: interconnect node reverse map (icntID to shaderID+MemID)
+GPGPU-Sim uArch: Memory nodes start from ID: 28
+GPGPU-Sim uArch:    0   1   2   3   4   5   6
+GPGPU-Sim uArch:    7   8   9  10  11  12  13
+GPGPU-Sim uArch:   14  15  16  17  18  19  20
+GPGPU-Sim uArch:   21  22  23  24  25  26  27
+GPGPU-Sim uArch:   28  29  30  31  32  33  34
+GPGPU-Sim uArch:   35  36  37  38  39  40  41
+GPGPU-Sim uArch:   42  43  44  45  46  47  48
+GPGPU-Sim uArch:   49  50  51
+83fc61a49a5ae476367a8b9865a701eb  /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+Extracting PTX file and ptxas options    1: cutlass-test.1.sm_70.ptx -arch=sm_70
+GPGPU-Sim uArch: performance model initialization complete.
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+9.1
+GPGPU-Sim PTX: __cudaRegisterFatBinary, fat_cubin_handle = 1, filename=default
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+Running md5sum using "md5sum /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test "
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+Extracting specific PTX file named cutlass-test.1.sm_70.ptx 
+GPGPU-Sim PTX: __cudaRegisterFunction _ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE : hostFun 0x0x403148, fat_cubin_handle = 1
+GPGPU-Sim PTX: Parsing cutlass-test.1.sm_70.ptx
+GPGPU-Sim PTX: allocating stack frame region for .param "__assertfail_param_0" from 0x0 to 0x8
+GPGPU-Sim PTX: allocating stack frame region for .param "__assertfail_param_1" from 0x8 to 0x10
+GPGPU-Sim PTX: allocating stack frame region for .param "__assertfail_param_2" from 0x10 to 0x14
+GPGPU-Sim PTX: allocating stack frame region for .param "__assertfail_param_3" from 0x14 to 0x1c
+GPGPU-Sim PTX: allocating stack frame region for .param "__assertfail_param_4" from 0x1c to 0x24
+GPGPU-Sim PTX: allocating global region for "__unnamed_1" from 0x100 to 0x190 (global memory space)
+GPGPU-Sim PTX: allocating global region for "__unnamed_2" from 0x200 to 0x28f (global memory space)
+GPGPU-Sim PTX: allocating global region for "$str" from 0x300 to 0x30f (global memory space)
+GPGPU-Sim PTX: allocating global region for "$str1" from 0x380 to 0x395 (global memory space)
+GPGPU-Sim PTX: allocating shared region for "_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE$__cuda_local_var_31507_57_non_const_shared_storage" from 0x0 to 0x8000 (shared memory space)
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0x0 to 0x8
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0x8 to 0x10
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0x10 to 0x14
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0x14 to 0x1c
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0x1c to 0x24
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0x24 to 0x2c
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0x2c to 0x34
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0x34 to 0x38
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0x38 to 0x40
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0x40 to 0x48
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0x48 to 0x50
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0x50 to 0x58
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0x58 to 0x5c
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0x5c to 0x64
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0x64 to 0x6c
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0x6c to 0x74
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0x74 to 0x7c
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0x7c to 0x80
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0x80 to 0x88
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0x88 to 0x90
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0x90 to 0x98
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0x98 to 0xa0
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0xa0 to 0xa4
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0xa4 to 0xac
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0xac to 0xb4
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0xb4 to 0xbc
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0xbc to 0xc4
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0xc4 to 0xc8
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0xc8 to 0xd0
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0xd0 to 0xd8
+GPGPU-Sim PTX: allocating stack frame region for .param "param0" from 0xd8 to 0xe0
+GPGPU-Sim PTX: allocating stack frame region for .param "param1" from 0xe0 to 0xe8
+GPGPU-Sim PTX: allocating stack frame region for .param "param2" from 0xe8 to 0xec
+GPGPU-Sim PTX: allocating stack frame region for .param "param3" from 0xec to 0xf4
+GPGPU-Sim PTX: allocating stack frame region for .param "param4" from 0xf4 to 0xfc
+GPGPU-Sim PTX: instruction assembly for function '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...   done.
+GPGPU-Sim PTX: finished parsing EMBEDDED .ptx file cutlass-test.1.sm_70.ptx
+GPGPU-Sim PTX: loading globals with explicit initializers... 
+GPGPU-Sim PTX:     initializing '__unnamed_1' ...  wrote 144 bytes
+GPGPU-Sim PTX:     initializing '__unnamed_2' ...  wrote 143 bytes
+GPGPU-Sim PTX:     initializing '$str' ...  wrote 15 bytes
+GPGPU-Sim PTX:     initializing '$str1' ...  wrote 21 bytes
+GPGPU-Sim PTX: finished loading globals (323 bytes total).
+GPGPU-Sim PTX: loading constants with explicit initializers...  done.
+GPGPU-Sim PTX: Loading PTXInfo from cutlass-test.1.sm_70.ptx
+GPGPU-Sim PTX: Kernel '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE' : regs=230, lmem=0, smem=32768, cmem=784
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+self exe links to: /home/ee557/Desktop/p4/cutlass-gpgpu-sim/cutlass-test
+9.1
+GPGPU-Sim PTX: __cudaRegisterFatBinary, fat_cubin_handle = 2, filename=default
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40a8f0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40ab80, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40ae10, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40b0a0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi1ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40b330, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40b5c0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40b850, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40bae0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceImLi0ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40bd60, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40bfe0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40c260, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40c4e0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi1ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40c760, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi1ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40c9e0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi1ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40cc60, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi0ELi1EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_ : hostFun 0x0x40cee0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memcpy_3d_deviceIjLi0ELi0ELi0EEvPKhPhT_S3_S3_S3_S3_S3_S3_jjjjjjjjS3_S1_S2_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40d100, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40d320, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40d540, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40d760, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi1ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40d980, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40dba0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40ddc0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40dfe0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceImLi0ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40e200, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40e420, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40e640, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40e860, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi1ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40ea80, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi1ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40eca0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi1ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40eec0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi0ELi1EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterFunction __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_ : hostFun 0x0x40f0e0, fat_cubin_handle = 2
+Warning: cannot find deviceFun __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37__Z16memset_3d_deviceIjLi0ELi0ELi0EEvPhhjT_S1_S1_S1_S1_jjjjjjjS1_S0_
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a52e0; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel32; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel32
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 64 bytes
+GPGPU-Sim PTX registering constant __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel32 (64 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a5320; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel64; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel64
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 64 bytes
+GPGPU-Sim PTX registering constant __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_set_kernel64 (64 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a5360; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel32; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel32
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 64 bytes
+GPGPU-Sim PTX registering constant __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel32 (64 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a53a0; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel64; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel64
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 64 bytes
+GPGPU-Sim PTX registering constant __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cpy_kernel64 (64 bytes) to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a4500; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorTableArr; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorTableArr
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 1992 bytes
+GPGPU-Sim PTX registering global __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorTableArr hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a52c0; deviceAddress = cudartErrorTable; deviceName = cudartErrorTable
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 8 bytes
+GPGPU-Sim PTX registering global cudartErrorTable hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x411fe0; deviceAddress = cudartErrorTableEntryCount; deviceName = cudartErrorTableEntryCount
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering global cudartErrorTableEntryCount hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x412000; deviceAddress = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorCnpMapArr; deviceName = __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorCnpMapArr
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 104 bytes
+GPGPU-Sim PTX registering global __nv_static_51__38_cuda_device_runtime_compute_70_cpp1_ii_8b1a5d37_cudartErrorCnpMapArr hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a52c8; deviceAddress = cudartErrorCnpMap; deviceName = cudartErrorCnpMap
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 8 bytes
+GPGPU-Sim PTX registering global cudartErrorCnpMap hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x411fe4; deviceAddress = cudartErrorCnpMapEntryCount; deviceName = cudartErrorCnpMapEntryCount
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering global cudartErrorCnpMapEntryCount hostVar to name mapping
+GPGPU-Sim PTX: __cudaRegisterVar: hostVar = 0x6a52d0; deviceAddress = __CNPRT_VERSION_NUMBER__; deviceName = __CNPRT_VERSION_NUMBER__
+GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of 4 bytes
+GPGPU-Sim PTX registering global __CNPRT_VERSION_NUMBER__ hostVar to name mapping
+GPGPU-Sim PTX: Setting up arguments for 432 bytes starting at 0x7ffe9d326450..
+
+GPGPU-Sim PTX: cudaLaunch for 0x0x403148 (mode=performance simulation) on stream 0
+GPGPU-Sim PTX: finding reconvergence points for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: Finding dominators for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: Finding immediate dominators for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: Finding postdominators for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: Finding immediate postdominators for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: pre-decoding instructions for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'...
+GPGPU-Sim PTX: reconvergence points for _ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE...
+GPGPU-Sim PTX:  1 (potential) branch divergence @  PC=0x158 (cutlass-test.1.sm_70.ptx:84) @%p7 bra BB0_2;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1d0 (cutlass-test.1.sm_70.ptx:122) mov.u32 %r1081, %ctaid.y;
+GPGPU-Sim PTX:  2 (potential) branch divergence @  PC=0x250 (cutlass-test.1.sm_70.ptx:138) @%p7 bra BB0_4;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2c8 (cutlass-test.1.sm_70.ptx:176) setp.lt.s32%p14, %r23, 32;
+GPGPU-Sim PTX:  3 (potential) branch divergence @  PC=0x2d0 (cutlass-test.1.sm_70.ptx:177) @%p14 bra BB0_7;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x388 (cutlass-test.1.sm_70.ptx:207) and.b32 %r1103, %r1515, 1;
+GPGPU-Sim PTX:  4 (potential) branch divergence @  PC=0x2d8 (cutlass-test.1.sm_70.ptx:178) bra.uni BB0_5;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x330 (cutlass-test.1.sm_70.ptx:193) setp.gt.s32%p15, %r23, 32;
+GPGPU-Sim PTX:  5 (potential) branch divergence @  PC=0x328 (cutlass-test.1.sm_70.ptx:190) bra.uni BB0_8;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x388 (cutlass-test.1.sm_70.ptx:207) and.b32 %r1103, %r1515, 1;
+GPGPU-Sim PTX:  6 (potential) branch divergence @  PC=0x338 (cutlass-test.1.sm_70.ptx:194) @%p15 bra BB0_8;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x388 (cutlass-test.1.sm_70.ptx:207) and.b32 %r1103, %r1515, 1;
+GPGPU-Sim PTX:  7 (potential) branch divergence @  PC=0x3c0 (cutlass-test.1.sm_70.ptx:214) @!%p20 bra BB0_10;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3d8 (cutlass-test.1.sm_70.ptx:221) cvt.s64.s32%rd117, %r10;
+GPGPU-Sim PTX:  8 (potential) branch divergence @  PC=0x3c8 (cutlass-test.1.sm_70.ptx:215) bra.uni BB0_9;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3d0 (cutlass-test.1.sm_70.ptx:218) ld.global.v4.u32 {%r1682, %r1681, %r1684, %r1683}, [%rd6];
+GPGPU-Sim PTX:  9 (potential) branch divergence @  PC=0x428 (cutlass-test.1.sm_70.ptx:231) @%p21 bra BB0_12;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x438 (cutlass-test.1.sm_70.ptx:236) cvt.s64.s32%rd119, %r11;
+GPGPU-Sim PTX: 10 (potential) branch divergence @  PC=0x488 (cutlass-test.1.sm_70.ptx:246) @!%p22 bra BB0_14;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x4a0 (cutlass-test.1.sm_70.ptx:253) cvt.s64.s32%rd122, %r1;
+GPGPU-Sim PTX: 11 (potential) branch divergence @  PC=0x490 (cutlass-test.1.sm_70.ptx:247) bra.uni BB0_13;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x498 (cutlass-test.1.sm_70.ptx:250) ld.global.v4.u32 {%r1690, %r1689, %r1692, %r1691}, [%rd8];
+GPGPU-Sim PTX: 12 (potential) branch divergence @  PC=0x4e8 (cutlass-test.1.sm_70.ptx:262) @%p23 bra BB0_16;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x4f8 (cutlass-test.1.sm_70.ptx:267) cvt.s64.s32%rd124, %r2;
+GPGPU-Sim PTX: 13 (potential) branch divergence @  PC=0x580 (cutlass-test.1.sm_70.ptx:284) @%p24 bra BB0_18;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x5f8 (cutlass-test.1.sm_70.ptx:322) mul.wide.s32 %rd134, %r68, 2;
+GPGPU-Sim PTX: 14 (potential) branch divergence @  PC=0x6b0 (cutlass-test.1.sm_70.ptx:348) @%p25 bra BB0_19;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1250 (cutlass-test.1.sm_70.ptx:744) setp.lt.s32%p34, %r1809, -31;
+GPGPU-Sim PTX: 15 (potential) branch divergence @  PC=0x8c0 (cutlass-test.1.sm_70.ptx:417) @%p26 bra BB0_23;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x9a0 (cutlass-test.1.sm_70.ptx:448) and.b32 %r1297, %r1515, 1;
+GPGPU-Sim PTX: 16 (potential) branch divergence @  PC=0x9b0 (cutlass-test.1.sm_70.ptx:450) @!%p29 bra BB0_25;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x9c8 (cutlass-test.1.sm_70.ptx:457) mul.wide.s32 %rd145, %r10, 2;
+GPGPU-Sim PTX: 17 (potential) branch divergence @  PC=0x9b8 (cutlass-test.1.sm_70.ptx:451) bra.uni BB0_24;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x9c0 (cutlass-test.1.sm_70.ptx:454) ld.global.v4.u32 {%r1682, %r1681, %r1684, %r1683}, [%rd357];
+GPGPU-Sim PTX: 18 (potential) branch divergence @  PC=0x9e8 (cutlass-test.1.sm_70.ptx:461) @%p30 bra BB0_27;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x9f8 (cutlass-test.1.sm_70.ptx:466) add.s64 %rd148, %rd117, %rd119;
+GPGPU-Sim PTX: 19 (potential) branch divergence @  PC=0xa20 (cutlass-test.1.sm_70.ptx:471) @!%p31 bra BB0_29;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0xa38 (cutlass-test.1.sm_70.ptx:478) mul.wide.s32 %rd150, %r1, 2;
+GPGPU-Sim PTX: 20 (potential) branch divergence @  PC=0xa28 (cutlass-test.1.sm_70.ptx:472) bra.uni BB0_28;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0xa30 (cutlass-test.1.sm_70.ptx:475) ld.global.v4.u32 {%r1690, %r1689, %r1692, %r1691}, [%rd356];
+GPGPU-Sim PTX: 21 (potential) branch divergence @  PC=0xa58 (cutlass-test.1.sm_70.ptx:482) @%p32 bra BB0_31;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0xa68 (cutlass-test.1.sm_70.ptx:487) add.s32 %r1319, %r68, 2176;
+GPGPU-Sim PTX: 22 (potential) branch divergence @  PC=0x1048 (cutlass-test.1.sm_70.ptx:675) @%p33 bra BB0_21;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1050 (cutlass-test.1.sm_70.ptx:676) bra.uni BB0_32;
+GPGPU-Sim PTX: 23 (potential) branch divergence @  PC=0x1050 (cutlass-test.1.sm_70.ptx:676) bra.uni BB0_32;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1250 (cutlass-test.1.sm_70.ptx:744) setp.lt.s32%p34, %r1809, -31;
+GPGPU-Sim PTX: 24 (potential) branch divergence @  PC=0x1258 (cutlass-test.1.sm_70.ptx:745) @%p34 bra BB0_35;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1790 (cutlass-test.1.sm_70.ptx:917) ld.param.f32 %f971, [_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE_param_0+428];
+GPGPU-Sim PTX: 25 (potential) branch divergence @  PC=0x1788 (cutlass-test.1.sm_70.ptx:914) @%p35 bra BB0_34;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1790 (cutlass-test.1.sm_70.ptx:917) ld.param.f32 %f971, [_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE_param_0+428];
+GPGPU-Sim PTX: 26 (potential) branch divergence @  PC=0x1838 (cutlass-test.1.sm_70.ptx:938) @%p36 bra BB0_104;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3870 (cutlass-test.1.sm_70.ptx:2251) ret;
+GPGPU-Sim PTX: 27 (potential) branch divergence @  PC=0x1840 (cutlass-test.1.sm_70.ptx:939) bra.uni BB0_36;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x24f0 (cutlass-test.1.sm_70.ptx:1455) ld.param.u64 %rd351, [_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE_param_0+280];
+GPGPU-Sim PTX: 28 (potential) branch divergence @  PC=0x1850 (cutlass-test.1.sm_70.ptx:943) @%p135 bra BB0_106;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x18c8 (cutlass-test.1.sm_70.ptx:981) shl.b32 %r1443, %r19, 2;
+GPGPU-Sim PTX: 29 (potential) branch divergence @  PC=0x18e8 (cutlass-test.1.sm_70.ptx:985) @%p136 bra BB0_108;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1960 (cutlass-test.1.sm_70.ptx:1023) mul.wide.s32 %rd294, %r822, 4;
+GPGPU-Sim PTX: 30 (potential) branch divergence @  PC=0x1b38 (cutlass-test.1.sm_70.ptx:1082) @%p139 bra BB0_110;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1b78 (cutlass-test.1.sm_70.ptx:1093) ld.param.f32 %f976, [_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE_param_0+424];
+GPGPU-Sim PTX: 31 (potential) branch divergence @  PC=0x1d68 (cutlass-test.1.sm_70.ptx:1155) @!%p142 bra BB0_112;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1d90 (cutlass-test.1.sm_70.ptx:1164) add.s64 %rd85, %rd84, %rd83;
+GPGPU-Sim PTX: 32 (potential) branch divergence @  PC=0x1d70 (cutlass-test.1.sm_70.ptx:1156) bra.uni BB0_111;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1d78 (cutlass-test.1.sm_70.ptx:1159) shl.b64 %rd301, %rd84, 2;
+GPGPU-Sim PTX: 33 (potential) branch divergence @  PC=0x1db0 (cutlass-test.1.sm_70.ptx:1168) @!%p145 bra BB0_114;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1dd8 (cutlass-test.1.sm_70.ptx:1177) add.s64 %rd86, %rd85, %rd83;
+GPGPU-Sim PTX: 34 (potential) branch divergence @  PC=0x1db8 (cutlass-test.1.sm_70.ptx:1169) bra.uni BB0_113;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1dc0 (cutlass-test.1.sm_70.ptx:1172) shl.b64 %rd304, %rd85, 2;
+GPGPU-Sim PTX: 35 (potential) branch divergence @  PC=0x1df8 (cutlass-test.1.sm_70.ptx:1181) @!%p148 bra BB0_116;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1e20 (cutlass-test.1.sm_70.ptx:1190) add.s64 %rd87, %rd86, %rd83;
+GPGPU-Sim PTX: 36 (potential) branch divergence @  PC=0x1e00 (cutlass-test.1.sm_70.ptx:1182) bra.uni BB0_115;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1e08 (cutlass-test.1.sm_70.ptx:1185) shl.b64 %rd307, %rd86, 2;
+GPGPU-Sim PTX: 37 (potential) branch divergence @  PC=0x1e40 (cutlass-test.1.sm_70.ptx:1194) @!%p151 bra BB0_118;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1e68 (cutlass-test.1.sm_70.ptx:1203) add.s64 %rd88, %rd87, %rd83;
+GPGPU-Sim PTX: 38 (potential) branch divergence @  PC=0x1e48 (cutlass-test.1.sm_70.ptx:1195) bra.uni BB0_117;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1e50 (cutlass-test.1.sm_70.ptx:1198) shl.b64 %rd310, %rd87, 2;
+GPGPU-Sim PTX: 39 (potential) branch divergence @  PC=0x1e88 (cutlass-test.1.sm_70.ptx:1207) @!%p154 bra BB0_120;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1eb0 (cutlass-test.1.sm_70.ptx:1216) add.s64 %rd89, %rd88, %rd83;
+GPGPU-Sim PTX: 40 (potential) branch divergence @  PC=0x1e90 (cutlass-test.1.sm_70.ptx:1208) bra.uni BB0_119;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1e98 (cutlass-test.1.sm_70.ptx:1211) shl.b64 %rd313, %rd88, 2;
+GPGPU-Sim PTX: 41 (potential) branch divergence @  PC=0x1ed0 (cutlass-test.1.sm_70.ptx:1220) @!%p157 bra BB0_122;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1ef8 (cutlass-test.1.sm_70.ptx:1229) add.s64 %rd90, %rd89, %rd83;
+GPGPU-Sim PTX: 42 (potential) branch divergence @  PC=0x1ed8 (cutlass-test.1.sm_70.ptx:1221) bra.uni BB0_121;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1ee0 (cutlass-test.1.sm_70.ptx:1224) shl.b64 %rd316, %rd89, 2;
+GPGPU-Sim PTX: 43 (potential) branch divergence @  PC=0x1f18 (cutlass-test.1.sm_70.ptx:1233) @!%p160 bra BB0_124;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1f40 (cutlass-test.1.sm_70.ptx:1242) cvt.s64.s32%rd321, %r1064;
+GPGPU-Sim PTX: 44 (potential) branch divergence @  PC=0x1f20 (cutlass-test.1.sm_70.ptx:1234) bra.uni BB0_123;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x1f28 (cutlass-test.1.sm_70.ptx:1237) shl.b64 %rd319, %rd90, 2;
+GPGPU-Sim PTX: 45 (potential) branch divergence @  PC=0x20d8 (cutlass-test.1.sm_70.ptx:1293) @%p163 bra BB0_126;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2128 (cutlass-test.1.sm_70.ptx:1306) ld.param.f32 %f977, [_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE_param_0+424];
+GPGPU-Sim PTX: 46 (potential) branch divergence @  PC=0x2310 (cutlass-test.1.sm_70.ptx:1367) @!%p166 bra BB0_128;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2338 (cutlass-test.1.sm_70.ptx:1376) add.s64 %rd93, %rd92, %rd83;
+GPGPU-Sim PTX: 47 (potential) branch divergence @  PC=0x2318 (cutlass-test.1.sm_70.ptx:1368) bra.uni BB0_127;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2320 (cutlass-test.1.sm_70.ptx:1371) shl.b64 %rd328, %rd92, 2;
+GPGPU-Sim PTX: 48 (potential) branch divergence @  PC=0x2358 (cutlass-test.1.sm_70.ptx:1380) @!%p169 bra BB0_130;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2380 (cutlass-test.1.sm_70.ptx:1389) add.s64 %rd94, %rd93, %rd83;
+GPGPU-Sim PTX: 49 (potential) branch divergence @  PC=0x2360 (cutlass-test.1.sm_70.ptx:1381) bra.uni BB0_129;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2368 (cutlass-test.1.sm_70.ptx:1384) shl.b64 %rd331, %rd93, 2;
+GPGPU-Sim PTX: 50 (potential) branch divergence @  PC=0x23a0 (cutlass-test.1.sm_70.ptx:1393) @!%p172 bra BB0_132;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x23c8 (cutlass-test.1.sm_70.ptx:1402) add.s64 %rd95, %rd94, %rd83;
+GPGPU-Sim PTX: 51 (potential) branch divergence @  PC=0x23a8 (cutlass-test.1.sm_70.ptx:1394) bra.uni BB0_131;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x23b0 (cutlass-test.1.sm_70.ptx:1397) shl.b64 %rd334, %rd94, 2;
+GPGPU-Sim PTX: 52 (potential) branch divergence @  PC=0x23e8 (cutlass-test.1.sm_70.ptx:1406) @!%p175 bra BB0_134;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2410 (cutlass-test.1.sm_70.ptx:1415) add.s64 %rd96, %rd95, %rd83;
+GPGPU-Sim PTX: 53 (potential) branch divergence @  PC=0x23f0 (cutlass-test.1.sm_70.ptx:1407) bra.uni BB0_133;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x23f8 (cutlass-test.1.sm_70.ptx:1410) shl.b64 %rd337, %rd95, 2;
+GPGPU-Sim PTX: 54 (potential) branch divergence @  PC=0x2430 (cutlass-test.1.sm_70.ptx:1419) @!%p178 bra BB0_136;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2458 (cutlass-test.1.sm_70.ptx:1428) add.s64 %rd97, %rd96, %rd83;
+GPGPU-Sim PTX: 55 (potential) branch divergence @  PC=0x2438 (cutlass-test.1.sm_70.ptx:1420) bra.uni BB0_135;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2440 (cutlass-test.1.sm_70.ptx:1423) shl.b64 %rd340, %rd96, 2;
+GPGPU-Sim PTX: 56 (potential) branch divergence @  PC=0x2478 (cutlass-test.1.sm_70.ptx:1432) @!%p181 bra BB0_138;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x24a0 (cutlass-test.1.sm_70.ptx:1441) add.s64 %rd346, %rd97, %rd83;
+GPGPU-Sim PTX: 57 (potential) branch divergence @  PC=0x2480 (cutlass-test.1.sm_70.ptx:1433) bra.uni BB0_137;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2488 (cutlass-test.1.sm_70.ptx:1436) shl.b64 %rd343, %rd97, 2;
+GPGPU-Sim PTX: 58 (potential) branch divergence @  PC=0x24d0 (cutlass-test.1.sm_70.ptx:1447) @!%p184 bra BB0_140;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3870 (cutlass-test.1.sm_70.ptx:2251) ret;
+GPGPU-Sim PTX: 59 (potential) branch divergence @  PC=0x24d8 (cutlass-test.1.sm_70.ptx:1448) bra.uni BB0_139;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x24e0 (cutlass-test.1.sm_70.ptx:1451) st.global.v4.f32 [%rd98], {%f226, %f225, %f224, %f223};
+GPGPU-Sim PTX: 60 (potential) branch divergence @  PC=0x24e8 (cutlass-test.1.sm_70.ptx:1452) bra.uni BB0_140;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3870 (cutlass-test.1.sm_70.ptx:2251) ret;
+GPGPU-Sim PTX: 61 (potential) branch divergence @  PC=0x2530 (cutlass-test.1.sm_70.ptx:1463) @%p37 bra BB0_38;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x25a8 (cutlass-test.1.sm_70.ptx:1501) shl.b32 %r1358, %r19, 2;
+GPGPU-Sim PTX: 62 (potential) branch divergence @  PC=0x25c8 (cutlass-test.1.sm_70.ptx:1505) @%p38 bra BB0_40;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2640 (cutlass-test.1.sm_70.ptx:1543) setp.lt.s32%p39, %r820, %r1070;
+GPGPU-Sim PTX: 63 (potential) branch divergence @  PC=0x2658 (cutlass-test.1.sm_70.ptx:1546) @!%p41 bra BB0_42;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2670 (cutlass-test.1.sm_70.ptx:1553) cvt.s64.s32%rd33, %r1057;
+GPGPU-Sim PTX: 64 (potential) branch divergence @  PC=0x2660 (cutlass-test.1.sm_70.ptx:1547) bra.uni BB0_41;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2668 (cutlass-test.1.sm_70.ptx:1550) ld.global.v4.u32 {%r1971, %r1972, %r1973, %r1974}, [%rd32];
+GPGPU-Sim PTX: 65 (potential) branch divergence @  PC=0x26a8 (cutlass-test.1.sm_70.ptx:1560) @!%p44 bra BB0_44;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x26c0 (cutlass-test.1.sm_70.ptx:1567) add.s64 %rd36, %rd34, %rd33;
+GPGPU-Sim PTX: 66 (potential) branch divergence @  PC=0x26b0 (cutlass-test.1.sm_70.ptx:1561) bra.uni BB0_43;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x26b8 (cutlass-test.1.sm_70.ptx:1564) ld.global.v4.u32 {%r1975, %r1976, %r1977, %r1978}, [%rd35];
+GPGPU-Sim PTX: 67 (potential) branch divergence @  PC=0x26f0 (cutlass-test.1.sm_70.ptx:1573) @!%p47 bra BB0_46;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2708 (cutlass-test.1.sm_70.ptx:1580) add.s64 %rd38, %rd36, %rd33;
+GPGPU-Sim PTX: 68 (potential) branch divergence @  PC=0x26f8 (cutlass-test.1.sm_70.ptx:1574) bra.uni BB0_45;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2700 (cutlass-test.1.sm_70.ptx:1577) ld.global.v4.u32 {%r1979, %r1980, %r1981, %r1982}, [%rd37];
+GPGPU-Sim PTX: 69 (potential) branch divergence @  PC=0x2738 (cutlass-test.1.sm_70.ptx:1586) @!%p50 bra BB0_48;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2750 (cutlass-test.1.sm_70.ptx:1593) add.s64 %rd40, %rd38, %rd33;
+GPGPU-Sim PTX: 70 (potential) branch divergence @  PC=0x2740 (cutlass-test.1.sm_70.ptx:1587) bra.uni BB0_47;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2748 (cutlass-test.1.sm_70.ptx:1590) ld.global.v4.u32 {%r1983, %r1984, %r1985, %r1986}, [%rd39];
+GPGPU-Sim PTX: 71 (potential) branch divergence @  PC=0x2780 (cutlass-test.1.sm_70.ptx:1599) @!%p53 bra BB0_50;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2798 (cutlass-test.1.sm_70.ptx:1606) add.s64 %rd42, %rd40, %rd33;
+GPGPU-Sim PTX: 72 (potential) branch divergence @  PC=0x2788 (cutlass-test.1.sm_70.ptx:1600) bra.uni BB0_49;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2790 (cutlass-test.1.sm_70.ptx:1603) ld.global.v4.u32 {%r1987, %r1988, %r1989, %r1990}, [%rd41];
+GPGPU-Sim PTX: 73 (potential) branch divergence @  PC=0x27c8 (cutlass-test.1.sm_70.ptx:1612) @!%p56 bra BB0_52;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x27e0 (cutlass-test.1.sm_70.ptx:1619) add.s64 %rd44, %rd42, %rd33;
+GPGPU-Sim PTX: 74 (potential) branch divergence @  PC=0x27d0 (cutlass-test.1.sm_70.ptx:1613) bra.uni BB0_51;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x27d8 (cutlass-test.1.sm_70.ptx:1616) ld.global.v4.u32 {%r1991, %r1992, %r1993, %r1994}, [%rd43];
+GPGPU-Sim PTX: 75 (potential) branch divergence @  PC=0x2810 (cutlass-test.1.sm_70.ptx:1625) @!%p59 bra BB0_54;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2828 (cutlass-test.1.sm_70.ptx:1632) add.s64 %rd46, %rd44, %rd33;
+GPGPU-Sim PTX: 76 (potential) branch divergence @  PC=0x2818 (cutlass-test.1.sm_70.ptx:1626) bra.uni BB0_53;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2820 (cutlass-test.1.sm_70.ptx:1629) ld.global.v4.u32 {%r1995, %r1996, %r1997, %r1998}, [%rd45];
+GPGPU-Sim PTX: 77 (potential) branch divergence @  PC=0x2858 (cutlass-test.1.sm_70.ptx:1638) @!%p62 bra BB0_56;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2870 (cutlass-test.1.sm_70.ptx:1645) mul.wide.s32 %rd208, %r822, 4;
+GPGPU-Sim PTX: 78 (potential) branch divergence @  PC=0x2860 (cutlass-test.1.sm_70.ptx:1639) bra.uni BB0_55;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2868 (cutlass-test.1.sm_70.ptx:1642) ld.global.v4.u32 {%r1999, %r2000, %r2001, %r2002}, [%rd47];
+GPGPU-Sim PTX: 79 (potential) branch divergence @  PC=0x2d80 (cutlass-test.1.sm_70.ptx:1807) @%p65 bra BB0_58;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2d90 (cutlass-test.1.sm_70.ptx:1812) cvt.s64.s32%rd52, %r1063;
+GPGPU-Sim PTX: 80 (potential) branch divergence @  PC=0x2db8 (cutlass-test.1.sm_70.ptx:1817) @!%p68 bra BB0_60;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2de0 (cutlass-test.1.sm_70.ptx:1826) add.s64 %rd54, %rd53, %rd52;
+GPGPU-Sim PTX: 81 (potential) branch divergence @  PC=0x2dc0 (cutlass-test.1.sm_70.ptx:1818) bra.uni BB0_59;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2dc8 (cutlass-test.1.sm_70.ptx:1821) shl.b64 %rd218, %rd53, 2;
+GPGPU-Sim PTX: 82 (potential) branch divergence @  PC=0x2e00 (cutlass-test.1.sm_70.ptx:1830) @!%p71 bra BB0_62;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2e28 (cutlass-test.1.sm_70.ptx:1839) add.s64 %rd55, %rd54, %rd52;
+GPGPU-Sim PTX: 83 (potential) branch divergence @  PC=0x2e08 (cutlass-test.1.sm_70.ptx:1831) bra.uni BB0_61;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2e10 (cutlass-test.1.sm_70.ptx:1834) shl.b64 %rd221, %rd54, 2;
+GPGPU-Sim PTX: 84 (potential) branch divergence @  PC=0x2e48 (cutlass-test.1.sm_70.ptx:1843) @!%p74 bra BB0_64;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2e70 (cutlass-test.1.sm_70.ptx:1852) add.s64 %rd56, %rd55, %rd52;
+GPGPU-Sim PTX: 85 (potential) branch divergence @  PC=0x2e50 (cutlass-test.1.sm_70.ptx:1844) bra.uni BB0_63;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2e58 (cutlass-test.1.sm_70.ptx:1847) shl.b64 %rd224, %rd55, 2;
+GPGPU-Sim PTX: 86 (potential) branch divergence @  PC=0x2e90 (cutlass-test.1.sm_70.ptx:1856) @!%p77 bra BB0_66;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2eb8 (cutlass-test.1.sm_70.ptx:1865) add.s64 %rd57, %rd56, %rd52;
+GPGPU-Sim PTX: 87 (potential) branch divergence @  PC=0x2e98 (cutlass-test.1.sm_70.ptx:1857) bra.uni BB0_65;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2ea0 (cutlass-test.1.sm_70.ptx:1860) shl.b64 %rd227, %rd56, 2;
+GPGPU-Sim PTX: 88 (potential) branch divergence @  PC=0x2ed8 (cutlass-test.1.sm_70.ptx:1869) @!%p80 bra BB0_68;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2f00 (cutlass-test.1.sm_70.ptx:1878) add.s64 %rd58, %rd57, %rd52;
+GPGPU-Sim PTX: 89 (potential) branch divergence @  PC=0x2ee0 (cutlass-test.1.sm_70.ptx:1870) bra.uni BB0_67;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2ee8 (cutlass-test.1.sm_70.ptx:1873) shl.b64 %rd230, %rd57, 2;
+GPGPU-Sim PTX: 90 (potential) branch divergence @  PC=0x2f20 (cutlass-test.1.sm_70.ptx:1882) @!%p83 bra BB0_70;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2f48 (cutlass-test.1.sm_70.ptx:1891) add.s64 %rd59, %rd58, %rd52;
+GPGPU-Sim PTX: 91 (potential) branch divergence @  PC=0x2f28 (cutlass-test.1.sm_70.ptx:1883) bra.uni BB0_69;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2f30 (cutlass-test.1.sm_70.ptx:1886) shl.b64 %rd233, %rd58, 2;
+GPGPU-Sim PTX: 92 (potential) branch divergence @  PC=0x2f68 (cutlass-test.1.sm_70.ptx:1895) @!%p86 bra BB0_72;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2f90 (cutlass-test.1.sm_70.ptx:1904) cvt.s64.s32%rd238, %r1064;
+GPGPU-Sim PTX: 93 (potential) branch divergence @  PC=0x2f70 (cutlass-test.1.sm_70.ptx:1896) bra.uni BB0_71;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2f78 (cutlass-test.1.sm_70.ptx:1899) shl.b64 %rd236, %rd59, 2;
+GPGPU-Sim PTX: 94 (potential) branch divergence @  PC=0x2fb8 (cutlass-test.1.sm_70.ptx:1909) @!%p89 bra BB0_74;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2fd0 (cutlass-test.1.sm_70.ptx:1916) add.s64 %rd61, %rd49, %rd33;
+GPGPU-Sim PTX: 95 (potential) branch divergence @  PC=0x2fc0 (cutlass-test.1.sm_70.ptx:1910) bra.uni BB0_73;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x2fc8 (cutlass-test.1.sm_70.ptx:1913) ld.global.v4.u32 {%r1971, %r1972, %r1973, %r1974}, [%rd50];
+GPGPU-Sim PTX: 96 (potential) branch divergence @  PC=0x3000 (cutlass-test.1.sm_70.ptx:1922) @!%p92 bra BB0_76;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3018 (cutlass-test.1.sm_70.ptx:1929) add.s64 %rd63, %rd61, %rd33;
+GPGPU-Sim PTX: 97 (potential) branch divergence @  PC=0x3008 (cutlass-test.1.sm_70.ptx:1923) bra.uni BB0_75;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3010 (cutlass-test.1.sm_70.ptx:1926) ld.global.v4.u32 {%r1975, %r1976, %r1977, %r1978}, [%rd62];
+GPGPU-Sim PTX: 98 (potential) branch divergence @  PC=0x3048 (cutlass-test.1.sm_70.ptx:1935) @!%p95 bra BB0_78;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3060 (cutlass-test.1.sm_70.ptx:1942) add.s64 %rd65, %rd63, %rd33;
+GPGPU-Sim PTX: 99 (potential) branch divergence @  PC=0x3050 (cutlass-test.1.sm_70.ptx:1936) bra.uni BB0_77;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3058 (cutlass-test.1.sm_70.ptx:1939) ld.global.v4.u32 {%r1979, %r1980, %r1981, %r1982}, [%rd64];
+GPGPU-Sim PTX: 100 (potential) branch divergence @  PC=0x3090 (cutlass-test.1.sm_70.ptx:1948) @!%p98 bra BB0_80;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x30a8 (cutlass-test.1.sm_70.ptx:1955) add.s64 %rd67, %rd65, %rd33;
+GPGPU-Sim PTX: 101 (potential) branch divergence @  PC=0x3098 (cutlass-test.1.sm_70.ptx:1949) bra.uni BB0_79;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x30a0 (cutlass-test.1.sm_70.ptx:1952) ld.global.v4.u32 {%r1983, %r1984, %r1985, %r1986}, [%rd66];
+GPGPU-Sim PTX: 102 (potential) branch divergence @  PC=0x30d8 (cutlass-test.1.sm_70.ptx:1961) @!%p101 bra BB0_82;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x30f0 (cutlass-test.1.sm_70.ptx:1968) add.s64 %rd69, %rd67, %rd33;
+GPGPU-Sim PTX: 103 (potential) branch divergence @  PC=0x30e0 (cutlass-test.1.sm_70.ptx:1962) bra.uni BB0_81;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x30e8 (cutlass-test.1.sm_70.ptx:1965) ld.global.v4.u32 {%r1987, %r1988, %r1989, %r1990}, [%rd68];
+GPGPU-Sim PTX: 104 (potential) branch divergence @  PC=0x3120 (cutlass-test.1.sm_70.ptx:1974) @!%p104 bra BB0_84;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3138 (cutlass-test.1.sm_70.ptx:1981) add.s64 %rd71, %rd69, %rd33;
+GPGPU-Sim PTX: 105 (potential) branch divergence @  PC=0x3128 (cutlass-test.1.sm_70.ptx:1975) bra.uni BB0_83;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3130 (cutlass-test.1.sm_70.ptx:1978) ld.global.v4.u32 {%r1991, %r1992, %r1993, %r1994}, [%rd70];
+GPGPU-Sim PTX: 106 (potential) branch divergence @  PC=0x3168 (cutlass-test.1.sm_70.ptx:1987) @!%p107 bra BB0_86;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3180 (cutlass-test.1.sm_70.ptx:1994) add.s64 %rd252, %rd71, %rd33;
+GPGPU-Sim PTX: 107 (potential) branch divergence @  PC=0x3170 (cutlass-test.1.sm_70.ptx:1988) bra.uni BB0_85;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3178 (cutlass-test.1.sm_70.ptx:1991) ld.global.v4.u32 {%r1995, %r1996, %r1997, %r1998}, [%rd72];
+GPGPU-Sim PTX: 108 (potential) branch divergence @  PC=0x31b0 (cutlass-test.1.sm_70.ptx:2000) @!%p110 bra BB0_88;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x31c8 (cutlass-test.1.sm_70.ptx:2007) bar.sync 0;
+GPGPU-Sim PTX: 109 (potential) branch divergence @  PC=0x31b8 (cutlass-test.1.sm_70.ptx:2001) bra.uni BB0_87;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x31c0 (cutlass-test.1.sm_70.ptx:2004) ld.global.v4.u32 {%r1999, %r2000, %r2001, %r2002}, [%rd73];
+GPGPU-Sim PTX: 110 (potential) branch divergence @  PC=0x3658 (cutlass-test.1.sm_70.ptx:2153) @%p113 bra BB0_90;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3678 (cutlass-test.1.sm_70.ptx:2160) add.s64 %rd74, %rd60, %rd52;
+GPGPU-Sim PTX: 111 (potential) branch divergence @  PC=0x3698 (cutlass-test.1.sm_70.ptx:2164) @!%p116 bra BB0_92;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x36c0 (cutlass-test.1.sm_70.ptx:2173) add.s64 %rd75, %rd74, %rd52;
+GPGPU-Sim PTX: 112 (potential) branch divergence @  PC=0x36a0 (cutlass-test.1.sm_70.ptx:2165) bra.uni BB0_91;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x36a8 (cutlass-test.1.sm_70.ptx:2168) shl.b64 %rd260, %rd74, 2;
+GPGPU-Sim PTX: 113 (potential) branch divergence @  PC=0x36e0 (cutlass-test.1.sm_70.ptx:2177) @!%p119 bra BB0_94;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3708 (cutlass-test.1.sm_70.ptx:2186) add.s64 %rd76, %rd75, %rd52;
+GPGPU-Sim PTX: 114 (potential) branch divergence @  PC=0x36e8 (cutlass-test.1.sm_70.ptx:2178) bra.uni BB0_93;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x36f0 (cutlass-test.1.sm_70.ptx:2181) shl.b64 %rd263, %rd75, 2;
+GPGPU-Sim PTX: 115 (potential) branch divergence @  PC=0x3728 (cutlass-test.1.sm_70.ptx:2190) @!%p122 bra BB0_96;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3750 (cutlass-test.1.sm_70.ptx:2199) add.s64 %rd77, %rd76, %rd52;
+GPGPU-Sim PTX: 116 (potential) branch divergence @  PC=0x3730 (cutlass-test.1.sm_70.ptx:2191) bra.uni BB0_95;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3738 (cutlass-test.1.sm_70.ptx:2194) shl.b64 %rd266, %rd76, 2;
+GPGPU-Sim PTX: 117 (potential) branch divergence @  PC=0x3770 (cutlass-test.1.sm_70.ptx:2203) @!%p125 bra BB0_98;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3798 (cutlass-test.1.sm_70.ptx:2212) add.s64 %rd78, %rd77, %rd52;
+GPGPU-Sim PTX: 118 (potential) branch divergence @  PC=0x3778 (cutlass-test.1.sm_70.ptx:2204) bra.uni BB0_97;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3780 (cutlass-test.1.sm_70.ptx:2207) shl.b64 %rd269, %rd77, 2;
+GPGPU-Sim PTX: 119 (potential) branch divergence @  PC=0x37b8 (cutlass-test.1.sm_70.ptx:2216) @!%p128 bra BB0_100;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x37e0 (cutlass-test.1.sm_70.ptx:2225) add.s64 %rd79, %rd78, %rd52;
+GPGPU-Sim PTX: 120 (potential) branch divergence @  PC=0x37c0 (cutlass-test.1.sm_70.ptx:2217) bra.uni BB0_99;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x37c8 (cutlass-test.1.sm_70.ptx:2220) shl.b64 %rd272, %rd78, 2;
+GPGPU-Sim PTX: 121 (potential) branch divergence @  PC=0x3800 (cutlass-test.1.sm_70.ptx:2229) @!%p131 bra BB0_102;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3828 (cutlass-test.1.sm_70.ptx:2238) add.s64 %rd278, %rd79, %rd52;
+GPGPU-Sim PTX: 122 (potential) branch divergence @  PC=0x3808 (cutlass-test.1.sm_70.ptx:2230) bra.uni BB0_101;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3810 (cutlass-test.1.sm_70.ptx:2233) shl.b64 %rd275, %rd79, 2;
+GPGPU-Sim PTX: 123 (potential) branch divergence @  PC=0x3858 (cutlass-test.1.sm_70.ptx:2244) @!%p134 bra BB0_140;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3870 (cutlass-test.1.sm_70.ptx:2251) ret;
+GPGPU-Sim PTX: 124 (potential) branch divergence @  PC=0x3860 (cutlass-test.1.sm_70.ptx:2245) bra.uni BB0_103;
+GPGPU-Sim PTX:    immediate post dominator      @  PC=0x3868 (cutlass-test.1.sm_70.ptx:2248) st.global.v4.f32 [%rd80], {%f191, %f192, %f193, %f194};
+GPGPU-Sim PTX: ... end of reconvergence points for _ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE
+GPGPU-Sim PTX: ... done pre-decoding instructions for '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'.
+GPGPU-Sim PTX: pushing kernel '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE' to stream 0, gridDim= (1,1,1) blockDim = (256,1,1) 
+GPGPU-Sim uArch: Shader 0 bind to kernel 1 '_ZN7cutlass4gemm11gemm_kernelINS0_4GemmINS0_14WmmaGemmTraitsILNS_12MatrixLayout4KindE1ELS5_0ENS_5ShapeILi32ELi128ELi128ELi1EEEfNS0_13LinearScalingIfNS0_19FragmentMultiplyAddIfEEEEfNS6_ILi32ELi32ELi64ELi1EEENS6_ILi16ELi16ELi16ELi1EEELi8ELi8EiNS0_20WmmaGemmTraitsHelperILS5_1ELS5_0ES7_ffSB_SC_SD_Li8ELi8EiEEEEEEEEvNT_6ParamsE'
+GPGPU-Sim uArch: CTA/core = 0, limited by: regs
+GPGPU-Sim uArch: ERROR ** Kernel requires more resources than shader has.
+GPGPU-Sim uArch: gpgpu_ignore_resources_limitation is set, ignore the ERROR!
+GPGPU-Sim uArch: ERROR ** Kernel requires more resources than shader has.
+GPGPU-Sim uArch: gpgpu_ignore_resources_limitation is set, ignore the ERROR!
+
+
+GPGPU-Sim uArch: ERROR ** deadlock detected: last writeback core 0 @ gpu_sim_cycle 7737 (+ gpu_tot_sim_cycle 4294867296) (92263 cycles ago)
+GPGPU-Sim uArch: DEADLOCK  shader cores no longer committing instructions [core(# threads)]:
+GPGPU-Sim uArch: DEADLOCK  0(256) 1(0) 
+
+Re-run the simulator in gdb and use debug routines in .gdbinit to debug this
